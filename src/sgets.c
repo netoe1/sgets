@@ -1,3 +1,6 @@
+#ifndef SGETS_C
+#define SGETS_C
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,15 +8,17 @@ void clearBuffers()
 {
     fseek(stdin, 0, SEEK_END);
 }
-
+static void __validstr(const char *s)
+{
+    if (s == NULL || s[0] == '\0')
+    {
+        fprintf(stderr, "Error: Invalid str, risk of memory leaks!");
+    }
+}
 void sgets(char *s, size_t size, FILE *stream)
 {
-    if (s == NULL)
-    {
-        fprintf(stderr, "Error: char *s pointer must be != than NULL!\n");
-        return;
-    }
 
+    __validstr(s);
     if (stream == NULL)
     {
         fprintf(stderr, "Error: File stream shouldn't be NULL!\n");
@@ -32,6 +37,8 @@ void sgets(char *s, size_t size, FILE *stream)
         return;
     }
 
+    setbuf(stdin, NULL);
     fgets(s, size, stream);
     s[strcspn(s, "\n")] = '\0';
 }
+#endif

@@ -393,8 +393,14 @@ void clearBuffers()
 void sgets(char *s, size_t size)
 {
     FILE *stream = stdin;
+    // Validation
+    if (!s)
+    {
+        fprintf(stderr, "Error: string shouldn't be null!\n");
+        return;
+    }
 
-    if (stream == NULL)
+    if (!stream)
     {
         fprintf(stderr, "Error: File stream shouldn't be NULL!\n");
         return;
@@ -406,6 +412,8 @@ void sgets(char *s, size_t size)
         return;
     }
 
+    // Setting string, ensure security
+    memset(s, 0, size);
     setbuf(stdin, NULL);
     fgets(s, size, stream);
     s[strcspn(s, "\n")] = '\0';
